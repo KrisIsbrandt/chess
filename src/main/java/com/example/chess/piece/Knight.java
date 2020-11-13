@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.example.chess.board.BoardUtils.*;
+import static com.example.chess.board.Move.*;
 
 public class Knight extends Piece {
 
@@ -22,7 +23,7 @@ public class Knight extends Piece {
     }
 
     @Override
-    public Collection<Move> calculateLegalMoves(Board board) {
+    public Collection<Move> calculateLegalMoves(final Board board) {
 
         final List<Move> legalMoves = new ArrayList<>();
 
@@ -39,16 +40,15 @@ public class Knight extends Piece {
                     continue;
                 }
 
-
                 final Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinate);
-                if (candidateDestinationTile.isTileOccupied()) {
-                    legalMoves.add(new Move());
+                if (!candidateDestinationTile.isTileOccupied()) {
+                    legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate));
                 } else {
                     //If occupied tile, check if it is occupied by enemy piece
                     final Piece pieceAtDestination = candidateDestinationTile.getPiece();
                     final Alliance pieceAlliance = pieceAtDestination.getAlliance();
                     if (this.pieceAlliance != pieceAlliance) {
-                        legalMoves.add(new Move());
+                        legalMoves.add(new AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
                     }
                 }
             }
@@ -77,11 +77,3 @@ public class Knight extends Piece {
                 (candidateOffset == 17 || candidateOffset == 10 || candidateOffset == -6 || candidateOffset == -15);
     }
 }
-/*
-1	tileCoordinate within 0-63 range
-if 1st column	6, 15, -10, -17 remove
-if 8th column	-6, -15, 10, 17 remove
-if 7th column	-6, 10 remove
-if 2nd column	6, -10 remove
-
- */
