@@ -2,7 +2,6 @@ package com.example.chess.piece;
 
 import com.example.chess.Alliance;
 import com.example.chess.board.Board;
-import com.example.chess.board.BoardUtils;
 import com.example.chess.board.Move;
 import com.example.chess.board.Tile;
 import com.google.common.collect.ImmutableList;
@@ -45,7 +44,7 @@ public class Bishop extends Piece {
                     } else {
                         //If occupied tile, check if it is occupied by enemy piece
                         final Piece pieceAtDestination = candidateDestinationTile.getPiece();
-                        final Alliance pieceAlliance = pieceAtDestination.getAlliance();
+                        final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
                         if (this.pieceAlliance != pieceAlliance) {
                             legalMoves.add(new AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
                         }
