@@ -2,7 +2,6 @@ package com.example.chess.piece;
 
 import com.example.chess.Alliance;
 import com.example.chess.board.Board;
-import com.example.chess.board.BoardUtils;
 import com.example.chess.board.Move;
 import com.google.common.collect.ImmutableList;
 
@@ -15,7 +14,7 @@ import static com.example.chess.board.Move.MajorMove;
 
 public class Pawn extends Piece {
 
-    private final static int[] CANDIDATE_MOVE_COORDINATE = {8, 16, 7, 9};
+    private final static int[] CANDIDATE_MOVE_COORDINATES = {8, 16, 7, 9};
 
     Pawn(final int piecePosition, final Alliance pieceAlliance) {
         super(piecePosition, pieceAlliance);
@@ -26,7 +25,7 @@ public class Pawn extends Piece {
 
         final List<Move> legalMoves = new ArrayList<>();
 
-        for (final int currentCandidateOffset : CANDIDATE_MOVE_COORDINATE) {
+        for (final int currentCandidateOffset : CANDIDATE_MOVE_COORDINATES) {
             final int candidateDestinationCoordinate = this.piecePosition + (this.getPieceAlliance().getDirection() * currentCandidateOffset);
 
             if (!isValidCoordinate(candidateDestinationCoordinate)) {
