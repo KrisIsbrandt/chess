@@ -32,6 +32,7 @@ public abstract class Tile {
 
     public abstract Piece getPiece();
 
+
     private static Map<Integer, EmptyTile> createAllPossibleEmptyTiles() {
         final Map<Integer, EmptyTile> emptyTileMap = new HashMap<>();
         for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
@@ -56,6 +57,11 @@ public abstract class Tile {
         public Piece getPiece() {
             return null;
         }
+
+        @Override
+        public String toString() {
+            return "-";
+        }
     }
 
     public static final class OccupiedTile extends Tile {
@@ -74,6 +80,12 @@ public abstract class Tile {
         @Override
         public Piece getPiece() {
             return this.pieceOnTile;
+        }
+
+        @Override
+        public String toString() {
+            return this.getPiece().getPieceAlliance().isBlack() ? getPiece().toString().toLowerCase() :
+                    getPiece().toString();
         }
     }
 }
