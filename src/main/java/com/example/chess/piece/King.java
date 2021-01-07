@@ -12,14 +12,25 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.example.chess.board.BoardUtils.*;
+import static com.example.chess.board.Move.*;
 
 public class King extends Piece {
 
     private static final int[] CANDIDATE_MOVE_COORDINATES = {1, 7, 8, 9, -1, -7, -8, -9};
 
     public King(final int piecePosition, final Alliance pieceAlliance) {
-        super(piecePosition, pieceAlliance);
+        super(piecePosition, pieceAlliance, PieceType.KING, true);
     }
+
+    public King(final int piecePosition, final Alliance pieceAlliance, final boolean isFirstMove) {
+        super(piecePosition, pieceAlliance, PieceType.KING, isFirstMove);
+    }
+
+    @Override
+    public King movePiece(final Move move) {
+        return new King(move.getDestinationCoordinate(), move.getMovedPiece().getPieceAlliance());
+    }
+
 
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {
@@ -37,13 +48,13 @@ public class King extends Piece {
 
                 final Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinate);
                 if (!candidateDestinationTile.isTileOccupied()) {
-                    legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
+                    legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate));
                 } else {
                     //If occupied tile, check if it is occupied by enemy piece
                     final Piece pieceAtDestination = candidateDestinationTile.getPiece();
                     final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
                     if (this.pieceAlliance != pieceAlliance) {
-                        legalMoves.add(new Move.AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                        legalMoves.add(new MajorAttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
                     }
                 }
             }

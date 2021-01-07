@@ -7,16 +7,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
-Immutable abstract Tile class with two subclasses, EmptyTile and OccupiedTile.
-Classes are immutable, so they variables cannot be changed after initialization.
-Tile class provide static factory for creating new tiles, both occupied and empty.
-EMPTY_TILES is map holds all empty tiles at the beginning of the game.
+ * Immutable abstract Tile class with two subclasses, EmptyTile and OccupiedTile.
+ * Classes are immutable, so they variables cannot be changed after initialization.
+ * Tile class provide static factory for creating new tiles, both occupied and empty.
+ * EMPTY_TILES is map holds all empty tiles at the beginning of the game.
  */
 
 public abstract class Tile {
 
     protected final int tileCoordinate;
-    
     private static final Map<Integer, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
 
     private Tile(final int tileCoordinate) {
@@ -32,6 +31,9 @@ public abstract class Tile {
 
     public abstract Piece getPiece();
 
+    public int getTileCoordinate() {
+        return tileCoordinate;
+    }
 
     private static Map<Integer, EmptyTile> createAllPossibleEmptyTiles() {
         final Map<Integer, EmptyTile> emptyTileMap = new HashMap<>();
@@ -42,6 +44,7 @@ public abstract class Tile {
         return ImmutableMap.copyOf(emptyTileMap);
     }
 
+    //Subclasses
     public static final class EmptyTile extends Tile {
 
         private EmptyTile(final int tileCoordinate) {

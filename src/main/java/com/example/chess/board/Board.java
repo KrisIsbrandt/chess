@@ -2,12 +2,17 @@ package com.example.chess.board;
 
 import com.example.chess.Alliance;
 import com.example.chess.piece.*;
+import com.example.chess.player.BlackPlayer;
+import com.example.chess.player.Player;
+import com.example.chess.player.WhitePlayer;
 import com.google.common.collect.ImmutableList;
-import org.checkerframework.checker.units.qual.A;
+import com.google.common.collect.Iterables;
 
 import java.util.*;
 
 /**
+ * Board keeps information about players and their pieces
+ *
  * Board utilizes a builder that determines piece positions and next mover;
  * Builder is used to set pieces and next mover, when build() it calls Board constructor
  * The constructor calls createGameBoard() that creates tiles and sets pieces based on the builder
@@ -18,13 +23,27 @@ public class Board {
     private final Collection<Piece> whitePieces;
     private final Collection<Piece> blackPieces;
 
-    private Board(Builder builder) {
+    private final WhitePlayer whitePlayer;
+    private final BlackPlayer blackPlayer;
+    private final Player currentPlayer;
+
+    private final Pawn enPassantPawn;
+
+    private Board(final Builder builder) {
+        //Set board and pieces
         this.gameBoard = createGameBoard(builder);
         this.whitePieces = calculateActivePieces(this.gameBoard, Alliance.WHITE);
         this.blackPieces = calculateActivePieces(this.gameBoard, Alliance.BLACK);
+        this.enPassantPawn = builder.enPassantPawn;
 
+        //determine legal moves
         final Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
         final Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
+
+        //Set players
+        this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
+        this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
+        this.currentPlayer = builder.nextMoveMaker.choosePlayer(this.whitePlayer, this.blackPlayer);
     }
 
     private Collection<Move> calculateLegalMoves(final Collection<Piece> pieces) {
@@ -35,6 +54,7 @@ public class Board {
         return ImmutableList.copyOf(legalMoves);
     }
 
+    //Get pieces from the board
     private static Collection<Piece> calculateActivePieces(final List<Tile> gameBoard, final Alliance alliance) {
         final List<Piece> activePieces = new ArrayList<>();
         for (final Tile tile : gameBoard) {
@@ -48,6 +68,7 @@ public class Board {
         return ImmutableList.copyOf(activePieces);
     }
 
+    //Create gameBoard based on builder config
     private static List<Tile> createGameBoard(final Builder builder) {
         final Tile[] tiles = new Tile[BoardUtils.NUM_TILES];
         for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
@@ -58,6 +79,10 @@ public class Board {
 
     public Tile getTile(int tileCoordinate) {
         return gameBoard.get(tileCoordinate);
+    }
+
+    public Pawn getEnPassantPawn() {
+        return enPassantPawn;
     }
 
     public static Board createStandardBoard() {
@@ -104,6 +129,7 @@ public class Board {
         return builder.build();
     }
 
+    //Pretty print of gameBoard
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
@@ -117,10 +143,35 @@ public class Board {
         return builder.toString();
     }
 
+    public Collection<Piece> getBlackPieces() {
+        return this.blackPieces;
+    }
+
+    public Collection<Piece> getWhitePieces() {
+        return this.whitePieces;
+    }
+
+    public Player getWhitePlayer() {
+        return this.whitePlayer;
+    }
+
+    public Player getBlackPlayer() {
+        return this.blackPlayer;
+    }
+
+    public Player currentPlayer() {
+        return this.currentPlayer;
+    }
+
+    public Iterable<Move> getAllLegalMoves() {
+        return Iterables.unmodifiableIterable(Iterables.concat(this.whitePlayer.getLegalMoves(), this.blackPlayer.getLegalMoves()));
+    }
+
     public static class Builder {
 
         Map<Integer, Piece> boardConfig = new HashMap<>();
         Alliance nextMoveMaker;
+        Pawn enPassantPawn;
 
         public Builder() {
         }
@@ -142,6 +193,11 @@ public class Board {
         @Override
         public String toString() {
             return "Builder{}";
+        }
+
+        public void setEnPassantPawn(Pawn enPassantPawn) {
+            this.enPassantPawn = enPassantPawn;
+
         }
     }
 }
