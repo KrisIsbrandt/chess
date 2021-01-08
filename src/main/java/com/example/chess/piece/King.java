@@ -18,19 +18,53 @@ public class King extends Piece {
 
     private static final int[] CANDIDATE_MOVE_COORDINATES = {1, 7, 8, 9, -1, -7, -8, -9};
 
-    public King(final int piecePosition, final Alliance pieceAlliance) {
+    private final boolean isCastled;
+    private final boolean kingSideCastleCapable;
+    private final boolean queenSideCastleCapable;
+
+    public King(final int piecePosition,
+                final Alliance pieceAlliance,
+                final boolean kingSideCastleCapable,
+                final boolean queenSideCastleCapable) {
         super(piecePosition, pieceAlliance, PieceType.KING, true);
+        this.isCastled = false;
+        this.kingSideCastleCapable = kingSideCastleCapable;
+        this.queenSideCastleCapable = queenSideCastleCapable;
     }
 
-    public King(final int piecePosition, final Alliance pieceAlliance, final boolean isFirstMove) {
+    public King(final int piecePosition,
+                final Alliance pieceAlliance,
+                final boolean isFirstMove,
+                final boolean isCastled,
+                final boolean kingSideCastleCapable,
+                final boolean queenSideCastleCapable) {
         super(piecePosition, pieceAlliance, PieceType.KING, isFirstMove);
+        this.isCastled = isCastled;
+        this.kingSideCastleCapable = kingSideCastleCapable;
+        this.queenSideCastleCapable = queenSideCastleCapable;
     }
 
     @Override
     public King movePiece(final Move move) {
-        return new King(move.getDestinationCoordinate(), move.getMovedPiece().getPieceAlliance());
+        return new King(move.getDestinationCoordinate(),
+                        move.getMovedPiece().getPieceAlliance(),
+                        false,
+                        move.isCastlingMove(),
+                        false,
+                        false);
     }
 
+    public boolean isCastled() {
+        return this.isCastled;
+    }
+
+    public boolean isKingSideCastleCapable() {
+        return this.kingSideCastleCapable;
+    }
+
+    public boolean isQueenSideCastleCapable() {
+        return this.queenSideCastleCapable;
+    }
 
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {

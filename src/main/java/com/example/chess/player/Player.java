@@ -118,4 +118,12 @@ public abstract class Player {
         }
         throw new RuntimeException("Not a valid board");
     }
+
+    public boolean isKingSideCastleCapable() {
+        return this.playerKing.isKingSideCastleCapable();
+    }
+
+    public boolean isQueenSideCastleCapable() {
+        return this.playerKing.isQueenSideCastleCapable();
+    }
 }
