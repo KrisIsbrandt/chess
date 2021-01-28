@@ -2,15 +2,19 @@ package com.example.chess.player;
 
 import com.example.chess.Alliance;
 import com.example.chess.board.Board;
+import com.example.chess.board.BoardUtils;
 import com.example.chess.board.Move;
 import com.example.chess.piece.King;
 import com.example.chess.piece.Piece;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Streams;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import static com.example.chess.board.BoardUtils.*;
 
 /**
  * Player is used to determine king status and player's legal move.
@@ -30,9 +34,10 @@ public abstract class Player {
            final Collection<Move> opponentMoves) {
         this.board = board;
         this.playerKing = establishKing();
-        this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves, calculateKingCastles(legalMoves, opponentMoves))) ;
         //if at least one opponent's move has a destinationCoordinate of player's king position, then player is in check
         this.isInCheck = !Player.calculateAttacksOnTile(this.playerKing.getPiecePosition(), opponentMoves).isEmpty();
+        legalMoves.addAll(calculateKingCastles(legalMoves, opponentMoves));
+        this.legalMoves = Collections.unmodifiableCollection(legalMoves);
     }
 
     public abstract Collection<Piece> getActivePieces();
@@ -42,6 +47,14 @@ public abstract class Player {
     public abstract Player getOpponent();
 
     public abstract Collection<Move> calculateKingCastles(Collection<Move> playerLegalMoves, Collection<Move> opponentsLegalMoves);
+
+    public boolean isKingSideCastleCapable() {
+        return this.playerKing.isKingSideCastleCapable();
+    }
+
+    public boolean isQueenSideCastleCapable() {
+        return this.playerKing.isQueenSideCastleCapable();
+    }
 
     public boolean isMoveLegal(final Move move) {
         return this.legalMoves.contains(move);
@@ -59,27 +72,23 @@ public abstract class Player {
         return !this.isInCheck && !hasEscapeMoves();
     }
 
+    public boolean isInDraw() {
+        //TODO threefold repetition rule and 50-move rule
+        return (!this.isInCheck && !isInCheckMate()) && (isInStaleMate() || !isPossibleToCheckmate());
+    }
+
     public boolean isCastled() {
-        return false;
+        return this.playerKing.isCastled();
     }
 
     public MoveTransition makeMove(final Move move) {
-        //Check if valid move
         if (!isMoveLegal(move)) {
             return new MoveTransition(this.board, move, MoveStatus.ILLEGAL_MOVE);
         }
-
-        //Make a move
         final Board transitionBoard = move.execute();
-
-        //Check if player's king is attacked after the move
-        final Collection<Move> kingAttacks = Player.calculateAttacksOnTile(transitionBoard.currentPlayer().getOpponent().getPlayerKing().getPiecePosition(),
-                transitionBoard.currentPlayer().getLegalMoves());
-        if (!kingAttacks.isEmpty()) {
-            return new MoveTransition(this.board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
-        }
-        
-        return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
+        return transitionBoard.currentPlayer().getOpponent().isInCheck ?
+                new MoveTransition(this.board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK) :
+                new MoveTransition(transitionBoard, move, MoveStatus.DONE);
     }
 
     public King getPlayerKing() {
@@ -88,6 +97,11 @@ public abstract class Player {
 
     public Collection<Move> getLegalMoves() {
         return this.legalMoves;
+    }
+
+    @Override
+    public String toString() {
+        return this.getAlliance().toString();
     }
 
     protected boolean hasEscapeMoves() {
@@ -110,6 +124,42 @@ public abstract class Player {
         return ImmutableList.copyOf(attackMoves);
     }
 
+    protected boolean isPossibleToCheckmate() {
+        /* Not possible to mate with following combinations:
+        -king versus king
+        -king and bishop versus king
+        -king and knight versus king
+        -king and bishop versus king and bishop with the bishops on the same color.
+        */
+        List<Piece> pieces = Streams.stream(this.board.getAllPieces()).collect(Collectors.toList());
+        if (pieces.size() > 4) {
+            return true;
+        } else if (pieces.size() == 4) {
+            Piece blackBishop = null, whiteBishop = null;
+            for (Piece piece : pieces) {
+                if (piece.getPieceType().equals(Piece.PieceType.BISHOP)) {
+                    if (piece.getPieceAlliance().isWhite()) {
+                        whiteBishop = piece;
+                    } else {
+                        blackBishop = piece;
+                    }
+                }
+            }
+            return !(whiteBishop != null && blackBishop != null &&
+                    (isWhiteTile(whiteBishop.getPiecePosition()) == isWhiteTile(blackBishop.getPiecePosition())));
+        } else if (pieces.size() == 3) {
+            for (Piece piece : pieces) {
+                if (piece.getPieceType().equals(Piece.PieceType.KING)) {
+                    continue;
+                } else {
+                    return !piece.getPieceType().equals(Piece.PieceType.BISHOP) &&
+                           !piece.getPieceType().equals(Piece.PieceType.KNIGHT);
+                }
+            }
+        }
+        return false;
+    }
+
     private King establishKing() {
         for (final Piece piece : getActivePieces()) {
             if (piece.getPieceType() == Piece.PieceType.KING) {
@@ -117,13 +167,5 @@ public abstract class Player {
             }
         }
         throw new RuntimeException("Not a valid board");
-    }
-
-    public boolean isKingSideCastleCapable() {
-        return this.playerKing.isKingSideCastleCapable();
-    }
-
-    public boolean isQueenSideCastleCapable() {
-        return this.playerKing.isQueenSideCastleCapable();
     }
 }

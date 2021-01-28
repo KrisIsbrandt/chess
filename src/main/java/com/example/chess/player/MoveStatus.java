@@ -6,10 +6,30 @@ public enum MoveStatus {
         public boolean isDone() {
             return true;
         }
+
+        @Override
+        public boolean isIllegalMove() {
+            return false;
+        }
+
+        @Override
+        public boolean leavesPlayerInCheck() {
+            return false;
+        }
     },
     ILLEGAL_MOVE {
         @Override
         public boolean isDone() {
+            return false;
+        }
+
+        @Override
+        public boolean isIllegalMove() {
+            return true;
+        }
+
+        @Override
+        public boolean leavesPlayerInCheck() {
             return false;
         }
     },
@@ -18,8 +38,20 @@ public enum MoveStatus {
         public boolean isDone() {
             return false;
         }
+
+        @Override
+        public boolean isIllegalMove() {
+            return false;
+        }
+
+        @Override
+        public boolean leavesPlayerInCheck() {
+            return true;
+        }
     };
     public abstract boolean isDone();
+    public abstract boolean isIllegalMove();
+    public abstract boolean leavesPlayerInCheck();
 
 
 }

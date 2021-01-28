@@ -19,8 +19,8 @@ public class King extends Piece {
     private static final int[] CANDIDATE_MOVE_COORDINATES = {1, 7, 8, 9, -1, -7, -8, -9};
 
     private final boolean isCastled;
-    private final boolean kingSideCastleCapable;
-    private final boolean queenSideCastleCapable;
+    private boolean kingSideCastleCapable;
+    private boolean queenSideCastleCapable;
 
     public King(final int piecePosition,
                 final Alliance pieceAlliance,
@@ -64,6 +64,14 @@ public class King extends Piece {
 
     public boolean isQueenSideCastleCapable() {
         return this.queenSideCastleCapable;
+    }
+
+    public void setKingSideCastleCapable(boolean kingSideCastleCapable) {
+        this.kingSideCastleCapable = kingSideCastleCapable;
+    }
+
+    public void setQueenSideCastleCapable(boolean queenSideCastleCapable) {
+        this.queenSideCastleCapable = queenSideCastleCapable;
     }
 
     @Override

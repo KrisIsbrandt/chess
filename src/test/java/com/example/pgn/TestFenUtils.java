@@ -5,12 +5,11 @@ import com.example.chess.board.Board;
 import com.example.chess.board.BoardUtils;
 import com.example.chess.board.Move;
 import com.example.chess.piece.*;
-import com.example.chess.player.BlackPlayer;
 import com.example.chess.player.MoveTransition;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-class FenUtilsTest {
+class TestFenUtils {
 
     @Test
     public void testStandardBoardFEN() {
@@ -44,4 +43,19 @@ class FenUtilsTest {
         assertEquals(new King(60, Alliance.WHITE, false, true),
                 board.getTile(60).getPiece());
     }
+
+    @Test
+    public void testFenParserEnPassantPawn() {
+        final String fenString = "k6n/2P3P1/1P6/4Pp2/8/4p3/PP1P4/3K4 w - f6 0 1";
+        final Board board = FenUtils.createGameFromFEN(fenString);
+        assertNotNull(board.getEnPassantPawn());
+    }
+
+    @Test
+    public void testFenParserEnPassantPawn2() {
+        final String fenString = "4k2r/ppp4p/8/8/5P2/8/PPPPP1PP/RNBQKBNR w KQk f3 0 1";
+        final Board board = FenUtils.createGameFromFEN(fenString);
+        assertNotNull(board.getEnPassantPawn());
+    }
+
 }

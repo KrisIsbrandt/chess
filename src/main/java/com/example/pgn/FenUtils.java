@@ -180,11 +180,11 @@ public class FenUtils {
         int coordinate = -1;
         try {
             coordinate = BoardUtils.getCoordinateAtPosition(enPassantPawnString);
-            if (BoardUtils.SECOND_RANK[coordinate]) {
-                coordinate =+ 8;
+            if (BoardUtils.THIRD_RANK[coordinate]) {
+                coordinate += 8;
                 return coordinate;
-            } else if (BoardUtils.SEVENTH_RANK[coordinate]) {
-                coordinate =- 8;
+            } else if (BoardUtils.SIX_RANK[coordinate]) {
+                coordinate -= 8;
                 return coordinate;
             }
         } catch (Exception ignored) {}

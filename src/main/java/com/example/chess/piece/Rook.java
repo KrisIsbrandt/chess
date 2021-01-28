@@ -30,7 +30,6 @@ public class Rook extends Piece {
         return new Rook(move.getDestinationCoordinate(), move.getMovedPiece().getPieceAlliance());
     }
 
-
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {
 
@@ -73,10 +72,10 @@ public class Rook extends Piece {
     }
 
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset) {
-        return FIRST_COLUMN[currentPosition] && candidateOffset == -1;
+        return FIRST_COLUMN[currentPosition] && candidateOffset == 1;
     }
 
     private static boolean isEighthColumnExclusion(final int currentPosition, final int candidateOffset) {
-        return EIGHTH_COLUMN[currentPosition] && candidateOffset == 1;
+        return EIGHTH_COLUMN[currentPosition] && candidateOffset == -1;
     }
 }

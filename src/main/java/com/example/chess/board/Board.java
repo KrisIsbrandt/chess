@@ -7,8 +7,12 @@ import com.example.chess.player.Player;
 import com.example.chess.player.WhitePlayer;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
 
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Board keeps information about players and their pieces
@@ -51,7 +55,7 @@ public class Board {
         for (final Piece piece : pieces) {
             legalMoves.addAll(piece.calculateLegalMoves(this));
         }
-        return ImmutableList.copyOf(legalMoves);
+        return legalMoves;
     }
 
     //Get pieces from the board
@@ -151,6 +155,10 @@ public class Board {
         return this.whitePieces;
     }
 
+    public Iterable<Piece> getAllPieces() {
+        return Iterables.concat(getBlackPieces(), getWhitePieces());
+    }
+
     public Player getWhitePlayer() {
         return this.whitePlayer;
     }
@@ -197,7 +205,6 @@ public class Board {
 
         public void setEnPassantPawn(Pawn enPassantPawn) {
             this.enPassantPawn = enPassantPawn;
-
         }
     }
 }

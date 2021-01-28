@@ -86,4 +86,16 @@ public class BoardUtils {
     public static String getPositionAtCoordinate(final int coordinate) {
         return ALGEBRAIC_NOTATION[coordinate];
     }
+
+    public static boolean isEndGame(final Board board) {
+        return board.currentPlayer().isInCheckMate() || board.currentPlayer().isInDraw();
+    }
+
+    public static boolean isWhiteTile(final int coordinate) {
+        if (FIRST_RANK[coordinate] || THIRD_RANK[coordinate] || FIFTH_RANK[coordinate] || SEVENTH_RANK[coordinate]) {
+            return coordinate % 2 == 0;
+        } else {
+            return coordinate % 2 == 1;
+        }
+    }
 }

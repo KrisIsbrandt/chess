@@ -74,11 +74,11 @@ public class Bishop extends Piece {
 
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset) {
         return FIRST_COLUMN[currentPosition] &&
-                (candidateOffset == 7 || candidateOffset == -9);
+                (candidateOffset == -7 || candidateOffset == 9);
     }
 
     private static boolean isEighthColumnExclusion(final int currentPosition, final int candidateOffset) {
         return EIGHTH_COLUMN[currentPosition] &&
-                (candidateOffset == -7 || candidateOffset == 9);
+                (candidateOffset == 7 || candidateOffset == -9);
     }
 }

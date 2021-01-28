@@ -14,7 +14,7 @@ public abstract class Piece {
 
     protected final int piecePosition;
     protected final Alliance pieceAlliance;
-    protected final boolean isFirstMove;
+    protected boolean isFirstMove;
     protected final PieceType pieceType;
     private final int cashedHashCode;
 
@@ -76,6 +76,10 @@ public abstract class Piece {
 
     public PieceType getPieceType() {
         return this.pieceType;
+    }
+
+    public void setFirstMove(boolean firstMove) {
+        this.isFirstMove = firstMove;
     }
 
     public enum PieceType {
