@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chess</title>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="/webjars/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/main.css" >
+
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/dashboard.js"></script>
+</head>
+<body>
+<noscript>
+    <h2 style="color: #ff0000">Seems your browser doesn't support
+        Javascript! Please enable Javascript and reload this page!</h2>
+</noscript>
+
+<!-- Create and Join Game Menu -->
+<div id="menu" class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Chess</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-inline float-lg-right">
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createGameModal">
+                        Create Game
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="gamelist" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>
+                        <div class="col-md-6">
+                            <button id="refresh" class="btn btn-primary btn-sm">
+                                <span class="fa fa-refresh"></span> Refresh
+                            </button>
+                            <span> Available Games</span>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody id="games">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Create Game Modal -->
+<div class="modal fade" id="createGameModal" tabindex="-1" role="dialog" aria-labelledby="createGameModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form action="/chess/create" method="post">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createGameModalLabel">Create Game</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" name="gamename" class="form-control" placeholder="Game name here..."/>
+            </div>
+            <div action="/chess/game" class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <input type="submit" class="btn btn-success" value="Create Game"/>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

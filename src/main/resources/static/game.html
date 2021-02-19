@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chess</title>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="/webjars/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/main.css" >
+    <link rel="stylesheet" href="/css/chessboard-1.0.0.css">
+
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/tether/dist/js/tether.min.js"></script>
+    <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/js/chessboard-1.0.0.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var gamestate = /*[[${game}]]*/ null;
+        /*]]>*/
+    </script>
+    <script src="/js/game.js"></script>
+</head>
+<body>
+<noscript>
+    <h2 style="color: #ff0000">Seems your browser doesn't support
+        Javascript! Please enable Javascript and reload this page!</h2>
+</noscript>
+<div class="container-fluid">
+    <div class="col-md-12">
+        <h1>Chess</h1>
+    </div>
+</div>
+<!-- Board -->
+<div id="gameView" class="container">
+    <div class="col-xs centered">
+        <div id="status" class="status"></div>
+        <div id="status2" class="status"></div>
+        <br/>
+    </div>
+    <div id="board"  style="width: 600px"></div>
+    <br>
+
+    <div class="row">
+        <div class="col-xs centered">
+            <button class="btn btn-danger" type="submit" data-toggle="modal" data-target="#forfeitModal">Forfeit</button>
+            <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#confirmationModal">Back to dashboard</button>
+        </div>
+    </div>
+</div>
+
+<!-- Forfeit Confirmation Modal-->
+<div class="modal fade" id="forfeitModal" tabindex="-1" role="dialog" aria-labelledby="forfeitModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="forfeitModalLabel">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>Are you sure you want to forfeit the game?</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button id="forfeit" type="button" class="btn btn-danger">Forfeit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Back to dashboard Confirmation Modal-->
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>Are you sure you want to go to the main dashboard?</div>
+                <div>You will lose if the game is progress</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button id="confirmation" type="button" class="btn btn-primary">Go to dashboard</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

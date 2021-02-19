@@ -1,6 +1,7 @@
 package pl.isbrandt.chess.board;
 
 import com.google.common.collect.ImmutableMap;
+import pl.isbrandt.chess.Alliance;
 
 import java.util.HashMap;
 import java.util.Map;
