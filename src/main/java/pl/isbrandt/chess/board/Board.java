@@ -1,13 +1,12 @@
 package pl.isbrandt.chess.board;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import pl.isbrandt.chess.Alliance;
-import pl.isbrandt.chess.piece.*;
 import pl.isbrandt.chess.piece.*;
 import pl.isbrandt.chess.player.BlackPlayer;
 import pl.isbrandt.chess.player.Player;
 import pl.isbrandt.chess.player.WhitePlayer;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
 import java.util.*;
 
@@ -174,7 +173,7 @@ public class Board {
 
     public static class Builder {
 
-        Map<Integer, Piece> boardConfig = new HashMap<>();
+        final Map<Integer, Piece> boardConfig = new HashMap<>();
         Alliance nextMoveMaker;
         Pawn enPassantPawn;
 

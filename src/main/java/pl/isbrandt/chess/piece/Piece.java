@@ -90,7 +90,7 @@ public abstract class Piece {
         QUEEN("Q"),
         KING("K");
 
-        private String pieceName;
+        private final String pieceName;
 
         PieceType(final String pieceName) {
             this.pieceName = pieceName;

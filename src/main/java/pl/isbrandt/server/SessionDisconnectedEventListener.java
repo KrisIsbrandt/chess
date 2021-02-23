@@ -14,8 +14,12 @@ import pl.isbrandt.server.repository.GameRepository;
 @Component
 public class SessionDisconnectedEventListener implements ApplicationListener<SessionDisconnectEvent> {
 
+    private final SimpMessagingTemplate template;
+
     @Autowired
-    private SimpMessagingTemplate template;
+    public SessionDisconnectedEventListener(SimpMessagingTemplate template) {
+        this.template = template;
+    }
 
     @Override
     public void onApplicationEvent(SessionDisconnectEvent event) {

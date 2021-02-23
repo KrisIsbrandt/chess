@@ -1,7 +1,6 @@
 package pl.isbrandt.chess.board;
 
 import com.google.common.collect.ImmutableMap;
-import pl.isbrandt.chess.Alliance;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +36,7 @@ public class BoardUtils {
         int counter = 0;
         for (int row = NUM_TILES_PER_ROW; row > 0 ; row--) {
             for (int column = 'a'; column <= 'h'; column++) {
-                algebraicNotation[counter] = Character.toString(column) + row;
+                algebraicNotation[counter] = String.valueOf((char) column) + row;
                 counter++;
             }
         }

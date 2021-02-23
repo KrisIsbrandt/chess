@@ -4,7 +4,6 @@ import pl.isbrandt.chess.Alliance;
 import pl.isbrandt.chess.board.Board;
 import pl.isbrandt.chess.board.BoardUtils;
 import pl.isbrandt.chess.piece.*;
-import pl.isbrandt.chess.piece.*;
 
 public class FenUtils {
 

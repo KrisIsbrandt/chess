@@ -107,15 +107,10 @@ public abstract class Move {
 
     public Board execute() {
         final Board.Builder builder = new Board.Builder();
-        for (final Piece piece : this.board.currentPlayer().getActivePieces()) {
-            //copy not-moved piece of the current player on the new board
+        for (final Piece piece : this.board.getAllPieces()) {
             if (!this.movedPiece.equals(piece)) {
                 builder.setPiece(piece);
             }
-        }
-        //copy opponents pieces
-        for (final Piece piece : this.board.currentPlayer().getOpponent().getActivePieces()) {
-            builder.setPiece(piece);
         }
         //check if rook moved
         if (this.movedPiece.getPieceType().equals(Piece.PieceType.ROOK) && this.movedPiece.isFirstMove()) {
@@ -162,7 +157,7 @@ public abstract class Move {
     }
 
     String isCheckOrMateMove() {
-        Board board = getBoard().currentPlayer().makeMove(this).getTransitionBoard();
+        Board board = this.board.currentPlayer().makeMove(this).getTransitionBoard();
         if (board.currentPlayer().isInCheckMate()) {
             return "#";
         } else if (board.currentPlayer().isInCheck()) {
@@ -322,13 +317,10 @@ public abstract class Move {
         @Override
         public Board execute() {
             final Board.Builder builder = new Board.Builder();
-            for (final Piece piece : this.board.currentPlayer().getActivePieces()) {
+            for (final Piece piece : this.board.getAllPieces()) {
                 if (!this.movedPiece.equals(piece)) {
                     builder.setPiece(piece);
                 }
-            }
-            for (final Piece piece : this.board.currentPlayer().getOpponent().getActivePieces()) {
-                builder.setPiece(piece);
             }
             final Pawn movedPawn = (Pawn) this.movedPiece.movePiece(this);
             builder.setPiece(movedPawn);
@@ -361,13 +353,10 @@ public abstract class Move {
         public Board execute() {
             final Board pawnMovedBoard = this.decoratedMove.execute();
             final Board.Builder builder = new Board.Builder();
-            for (final Piece piece : pawnMovedBoard.currentPlayer().getActivePieces()) {
-                if (!this.promotedPawn.equals(piece)) {
+            for (final Piece piece : this.board.getAllPieces()) {
+                if (!this.movedPiece.equals(piece)) {
                     builder.setPiece(piece);
                 }
-            }
-            for (final Piece piece : pawnMovedBoard.currentPlayer().getOpponent().getActivePieces()) {
-                builder.setPiece(piece);
             }
             builder.setPiece(this.promotionPiece.movePiece(this));
             builder.setMoveMaker(pawnMovedBoard.currentPlayer().getAlliance());

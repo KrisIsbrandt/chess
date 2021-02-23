@@ -12,7 +12,7 @@ public class GameRepository {
     private static final int MAX_GAME_LIMIT = 100;
 
     private static Long id = 0L;
-    public static List<Game> games = new ArrayList<>();
+    public static final List<Game> games = new ArrayList<>();
 
     public static Game save(Game game) throws GameLimitException {
         if (games.size() >= MAX_GAME_LIMIT) {

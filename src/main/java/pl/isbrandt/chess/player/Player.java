@@ -70,7 +70,6 @@ public abstract class Player {
     }
 
     public boolean isInDraw() {
-        //TODO threefold repetition rule and 50-move rule
         return (!this.isInCheck && !isInCheckMate()) && (isInStaleMate() || !isPossibleToCheckmate());
     }
 

@@ -105,6 +105,7 @@ $(function () {
 		gamestate = data;
 		gameStatus();
 		drawBoard();
+		updatePGN();
 	}
 
 	function drawBoard() {
@@ -132,6 +133,10 @@ $(function () {
 
 		$("#status").text(status);
 		$("#status2").text(status2);
+	}
+
+	function updatePGN() {
+		$("#pgn").text(gamestate.pgn);
 	}
 
 	function getCookie(cname) {

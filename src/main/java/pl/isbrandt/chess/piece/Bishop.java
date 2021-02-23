@@ -1,18 +1,18 @@
 package pl.isbrandt.chess.piece;
 
+import com.google.common.collect.ImmutableList;
 import pl.isbrandt.chess.Alliance;
 import pl.isbrandt.chess.board.Board;
 import pl.isbrandt.chess.board.Move;
 import pl.isbrandt.chess.board.Tile;
-import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import static pl.isbrandt.chess.board.BoardUtils.*;
-import static pl.isbrandt.chess.board.BoardUtils.isValidCoordinate;
-import static pl.isbrandt.chess.board.Move.*;
+import static pl.isbrandt.chess.board.Move.MajorAttackMove;
+import static pl.isbrandt.chess.board.Move.MajorMove;
 
 public class Bishop extends Piece {
 

@@ -19,8 +19,12 @@ import java.util.stream.Collectors;
 @Controller
 public class ServerController {
 
+    private final SimpMessagingTemplate template;
+
     @Autowired
-    private SimpMessagingTemplate template;
+    public ServerController(SimpMessagingTemplate template) {
+        this.template = template;
+    }
 
     @GetMapping("")
     public String showDashboard(HttpServletRequest request, HttpServletResponse response) {

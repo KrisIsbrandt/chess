@@ -8,6 +8,7 @@ public class GameDTO {
     private String whitePlayerId;
     private String blackPlayerId;
     private Game.GameState state;
+    private String pgn;
 
     public GameDTO() {}
 
@@ -23,6 +24,7 @@ public class GameDTO {
         this.whitePlayerId = game.getWhitePlayer();
         this.blackPlayerId = game.getBlackPlayer();
         this.state = game.getState();
+        this.pgn = game.getMoveLog().getPgn();
     }
 
     public Long getId() {
@@ -71,5 +73,13 @@ public class GameDTO {
 
     public void setBlackPlayerId(String blackPlayerId) {
         this.blackPlayerId = blackPlayerId;
+    }
+
+    public String getPgn() {
+        return pgn;
+    }
+
+    public void setPgn(String pgn) {
+        this.pgn = pgn;
     }
 }

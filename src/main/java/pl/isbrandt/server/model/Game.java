@@ -4,12 +4,15 @@ import pl.isbrandt.chess.Alliance;
 import pl.isbrandt.chess.board.Board;
 import pl.isbrandt.chess.board.BoardUtils;
 import pl.isbrandt.chess.board.Move;
+import pl.isbrandt.pgn.MoveLog;
 import pl.isbrandt.chess.player.MoveTransition;
 import pl.isbrandt.pgn.FenUtils;
 
 import java.util.Random;
 
 public class Game {
+
+    private final String INITIAL_FEN_STRING = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
     private Long id;
     private String boardName;
@@ -22,6 +25,7 @@ public class Game {
     private Board board;
     private String fen;
     private GameState state;
+    private MoveLog moveLog;
 
     public Game() {
     }
@@ -37,7 +41,8 @@ public class Game {
         }
         this.state = GameState.PENDING;
         this.board = Board.createStandardBoard();
-        this.fen = FenUtils.createFenFromGame(this.board);
+        this.fen = INITIAL_FEN_STRING;
+        this.moveLog = new MoveLog();
     }
 
     public Long getId() {
@@ -52,24 +57,12 @@ public class Game {
         return boardName;
     }
 
-    public void setBoardName(String boardName) {
-        this.boardName = boardName;
-    }
-
     public String getWhitePlayer() {
         return whitePlayer;
     }
 
-    public void setWhitePlayer(String whitePlayer) {
-        this.whitePlayer = whitePlayer;
-    }
-
     public String getBlackPlayer() {
         return blackPlayer;
-    }
-
-    public void setBlackPlayer(String blackPlayer) {
-        this.blackPlayer = blackPlayer;
     }
 
     public Board getBoard() {
@@ -90,10 +83,6 @@ public class Game {
 
     public String getFen() {
         return fen;
-    }
-
-    public void setFen(String fen) {
-        this.fen = fen;
     }
 
     public boolean playerColorRandomizer() {
@@ -142,6 +131,7 @@ public class Game {
                 if (moveTransition.getMoveStatus().isDone()) {
                     this.board = moveTransition.getTransitionBoard();
                     this.fen = FenUtils.createFenFromGame(this.board);
+                    this.moveLog.addMove(move, this.fen);
                     this.state = nextPlayerToPlay(playerAlliance);
                     if (BoardUtils.isEndGame(this.board)) {
                         if (this.board.currentPlayer().isInDraw()) this.state = GameState.DRAW;
@@ -179,6 +169,10 @@ public class Game {
             return this.player2Id;
         }
         return null;
+    }
+
+    public MoveLog getMoveLog() {
+        return this.moveLog;
     }
 
     public enum GameState {
